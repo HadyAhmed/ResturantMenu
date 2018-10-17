@@ -8,6 +8,16 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/settings_menu_item"
-        android:title="@string/setings_menu"
+        android:title="@string/settings_menu"
         app:showAsAction="ifRoom" />
+    <item android:title="@string/other_settings_menu_item">
+        <menu>
+            <item
+                android:id="@+id/export_mItem"
+                android:title="@string/export_menu_item" />
+            <item
+                android:id="@+id/import_mItem"
+                android:title="@string/import_menu_item" />
+        </menu>
+    </item>
 </menu>

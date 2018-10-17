@@ -1,12 +1,14 @@
 package com.hadi.resturant.activity;
 
+import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 import com.hadi.resturant.R;
 
 public class SettingsActivity extends AppCompatActivity {
+
+    private final static String TAG = SettingsActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
