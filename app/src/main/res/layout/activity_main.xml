@@ -4,8 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:divider="@color/colorPrimaryDark"
-    android:dividerHeight="2dp"
     tools:context=".activity.MainActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -15,9 +13,11 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/tool_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:subtitleTextColor="@android:color/white"
+            app:titleTextColor="@android:color/white" />
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/item_list_view" />
+    <include layout="@layout/main_content_list" />
 </android.support.design.widget.CoordinatorLayout>
 

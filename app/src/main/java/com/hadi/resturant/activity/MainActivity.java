@@ -3,14 +3,15 @@ package com.hadi.resturant.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.hadi.resturant.R;
-import com.hadi.resturant.adapter.DataItemListAdapter;
+import com.hadi.resturant.adapter.DataItemAdapter;
 import com.hadi.resturant.model.DataItem;
 import com.hadi.resturant.sample.SampleDataProvider;
 
@@ -41,18 +42,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ListView listView = findViewById(R.id.items);
-        DataItemListAdapter adapter = new DataItemListAdapter(this, dataItems);
+        RecyclerView listView = findViewById(R.id.items);
+        DataItemAdapter adapter = new DataItemAdapter(this, dataItems);
         listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent detailIntent = new Intent(MainActivity.this, DetailsActivity.class);
-                detailIntent.putExtra(ITEM_KEY, dataItems.get(position));
-                startActivity(detailIntent);
-            }
-        });
-
+        listView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
     }
 }
