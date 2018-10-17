@@ -2,7 +2,9 @@ package com.hadi.resturant.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -34,7 +36,12 @@ public class DataItemAdapter extends RecyclerView.Adapter<DataItemAdapter.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_list_view, viewGroup, false));
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        boolean isGrid = preferences.getBoolean(mContext.getString(R.string.grid_key), false);
+
+        int layout_resource = isGrid ? R.layout.item_grid_view : R.layout.item_list_view;
+
+        return new ViewHolder(LayoutInflater.from(mContext).inflate(layout_resource, viewGroup, false));
     }
 
     @Override

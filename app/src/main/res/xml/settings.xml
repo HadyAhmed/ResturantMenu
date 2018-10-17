@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Account Settings">
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="stay_logged_in_key"
+            android:summary="@string/stay_login_summary"
+            android:title="Check To Stay Signed in" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Application Look">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/grid_key"
+            android:summary="this will let you see the menu item in grid and bigger views"
+            android:title="Show Menu Items In Grid" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/night_key"
+            android:summary="auto dark theme mode according to your current time"
+            android:title="Night Mode" />
+    </PreferenceCategory>
+</PreferenceScreen>

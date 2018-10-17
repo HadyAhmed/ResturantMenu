@@ -3,9 +3,12 @@ package com.hadi.resturant.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.design.card.MaterialCardView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -49,9 +52,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
         RecyclerView listView = findViewById(R.id.items);
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isGrid = pref.getBoolean(getString(R.string.grid_key), false);
+        if (isGrid) {
+            listView.setLayoutManager(new GridLayoutManager(this, 2));
+        } else {
+            listView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        }
         DataItemAdapter adapter = new DataItemAdapter(this, dataItems);
         listView.setAdapter(adapter);
-        listView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
     }
 
     @Override
@@ -68,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(loginIntent, SIGN_IN_REQUEST);
                 return true;
             default:
-                //TODO : Add The Settings Activity Intent To Start Here
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                 return true;
         }
     }

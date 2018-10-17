@@ -11,4 +11,8 @@
     <string name="title_text">Frok And Knife</string>
     <string name="valid_pass_hint">Please Insert Valid Password</string>
     <string name="valid_email_hint">Please Insert Valid Gmail Account</string>
+    <string name="stay_login_summary">this will let you signed in always and no need to log in every time</string>
+    <string name="settings_label">Settings</string>
+    <string name="grid_key">grid_key</string>
+    <string name="night_key">night_theme_key</string>
 </resources>
