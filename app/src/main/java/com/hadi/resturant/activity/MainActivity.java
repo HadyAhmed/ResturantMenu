@@ -16,11 +16,12 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.hadi.resturant.JSONHelper;
+import com.hadi.resturant.utils.JSONHelper;
 import com.hadi.resturant.R;
 import com.hadi.resturant.adapter.DataItemAdapter;
 import com.hadi.resturant.model.DataItem;
@@ -108,8 +109,13 @@ public class MainActivity extends AppCompatActivity {
                 if (!accessToExternalStorage) {
                     checkStoragePermission();
                 } else {
-                    Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
-                    // Do Some Code Here
+                    List<DataItem> importedDataItems = JSONHelper.importFromJSON(this);
+                    if (importedDataItems != null) {
+                        for (DataItem items :
+                                importedDataItems) {
+                            Log.i(TAG, "OnImportOptionSelected: " + items.getItemName());
+                        }
+                    }
                 }
                 break;
         }
