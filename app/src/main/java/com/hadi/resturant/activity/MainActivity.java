@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!accessToExternalStorage) {
                     checkStoragePermission();
                 } else {
-                    List<DataItem> importedDataItems = JSONHelper.importFromJSON(this);
+                    List<DataItem> importedDataItems = JSONHelper.importFromResource(this);
                     if (importedDataItems != null) {
                         for (DataItem items :
                                 importedDataItems) {

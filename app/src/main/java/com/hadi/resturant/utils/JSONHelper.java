@@ -6,12 +6,15 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.hadi.resturant.R;
 import com.hadi.resturant.model.DataItem;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 
 /**
@@ -77,6 +80,43 @@ public class JSONHelper {
             if (fileReader != null) {
                 try {
                     fileReader.close();
+                } catch (IOException e) {
+                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public static List<DataItem> importFromResource(Context context) {
+        // Creating An Instance Of File In The Same External Storage Path With Name of FILE_NAME
+        File file = new File(Environment.getExternalStorageDirectory(), FILE_NAME);
+        // Creating A File Reader Instance.
+        InputStreamReader reader = null;
+        InputStream inputStream = null;
+        try {
+            inputStream = context.getResources().openRawResource(R.raw.menuitems);
+            reader = new InputStreamReader(inputStream);
+            Gson gson = new Gson();
+            // Getting Wrapped Object From Gson reader
+            DataItems dataItems = gson.fromJson(reader, DataItems.class);
+            // Return List Of All The Returned Data Items in one object
+            Toast.makeText(context, "Data Stored Successfully", Toast.LENGTH_SHORT).show();
+            return dataItems.getDataItems();
+        } catch (Exception e) {
+            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
                 } catch (IOException e) {
                     Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
