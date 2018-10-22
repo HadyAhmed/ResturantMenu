@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -21,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.hadi.resturant.database.DBHelper;
 import com.hadi.resturant.utils.JSONHelper;
 import com.hadi.resturant.R;
 import com.hadi.resturant.adapter.DataItemAdapter;
@@ -46,7 +49,8 @@ public class MainActivity extends AppCompatActivity {
     private List<DataItem> dataItems = SampleDataProvider.dataItemList;
     // Reference To Check The Current Permission was granted or not yet
     private boolean accessToExternalStorage;
-
+    // Reference To Database SQLite
+    SQLiteDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +61,10 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitle(getResources().getString(R.string.app_name));
         toolbar.setSubtitle(R.string.subtitle_menu_item);
+
+        SQLiteOpenHelper dbHelper = new DBHelper(this);
+        database = dbHelper.getWritableDatabase();
+
 
         // Sorting the list item alphabetically
         Collections.sort(dataItems, new Comparator<DataItem>() {
