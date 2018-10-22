@@ -18,4 +18,5 @@
     <string name="export_menu_item">Export Menu</string>
     <string name="other_settings_menu_item">Other Settings</string>
     <string name="import_menu_item">Import Menu</string>
+    <string name="subtitle_menu_item">Menu Items</string>
 </resources>

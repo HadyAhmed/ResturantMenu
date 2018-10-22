@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.hadi.resturant.JSONHelper;
 import com.hadi.resturant.R;
 import com.hadi.resturant.adapter.DataItemAdapter;
 import com.hadi.resturant.model.DataItem;
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
         toolbar.setTitle(getResources().getString(R.string.app_name));
-        toolbar.setSubtitle("Menu Items");
+        toolbar.setSubtitle(R.string.subtitle_menu_item);
 
         // Sorting the list item alphabetically
         Collections.sort(dataItems, new Comparator<DataItem>() {
@@ -64,13 +65,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // find the reference for the recycler view in the activity_main.xml
         RecyclerView recyclerView = findViewById(R.id.items);
         // Get the reference from the settings xml file
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isGrid = pref.getBoolean(getString(R.string.grid_key), false);
         if (isGrid) {
+            // if the user select grid then show up menu in grid.
             recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         } else {
+            // else show up menu item in linear and add divider between them.
             recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         }
         DataItemAdapter adapter = new DataItemAdapter(this, dataItems);
@@ -95,15 +99,14 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.export_mItem:
                 if (!accessToExternalStorage) {
-                    checkPermissions();
+                    checkStoragePermission();
                 } else {
-                    Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
-                    // Do Some Code Here
+                    JSONHelper.exportToJSON(this, dataItems);
                 }
                 break;
             case R.id.import_mItem:
                 if (!accessToExternalStorage) {
-                    checkPermissions();
+                    checkStoragePermission();
                 } else {
                     Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
                     // Do Some Code Here
@@ -125,17 +128,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * @return if the external storage state is mounted
+     */
     private boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
         return Environment.MEDIA_MOUNTED.equals(state);
     }
 
+    /**
+     * @return if the external storage mounted and can be read
+     */
     private boolean isExternalStorageReadable() {
         String state = Environment.getExternalStorageState();
         return (Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state));
     }
 
-    private boolean checkPermissions() {
+    /**
+     * @return if the app has checked the external storage access or not.
+     */
+    private boolean checkStoragePermission() {
         if (!isExternalStorageReadable() && !isExternalStorageWritable()) {
             Toast.makeText(this, "This App Needs External Storage Memory", Toast.LENGTH_SHORT).show();
             return false;
