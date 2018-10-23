@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.SQLException;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -29,8 +28,6 @@ import com.hadi.resturant.model.DataItem;
 import com.hadi.resturant.sample.SampleDataProvider;
 import com.hadi.resturant.utils.JSONHelper;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -63,27 +60,14 @@ public class MainActivity extends AppCompatActivity {
 
         mDataSource = new DataSource(this);
         mDataSource.open();
+        mDataSource.seedDatabase(dataItems); // Store the dataItems into the database
 
-        if (mDataSource.getDatabaseCount() == 0) {
-            for (DataItem items : dataItems) {
-                try {
-                    mDataSource.createItem(items);
-                } catch (SQLException e) {
-                    Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-            Toast.makeText(this, "Items Inserted Into Database", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Database Already Exist", Toast.LENGTH_SHORT).show();
+        List<DataItem> listFromDatabase = mDataSource.getAllItems();
+        for (DataItem items :
+                listFromDatabase) {
+            Log.i(TAG, items.getItemName());
         }
-
-        // Sorting the list item alphabetically
-        Collections.sort(dataItems, new Comparator<DataItem>() {
-            @Override
-            public int compare(DataItem o1, DataItem o2) {
-                return o1.getItemName().compareTo(o2.getItemName());
-            }
-        });
+        DataItemAdapter adapter = new DataItemAdapter(this, listFromDatabase);
 
         // find the reference for the recycler view in the activity_main.xml
         RecyclerView recyclerView = findViewById(R.id.items);
@@ -97,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
             // else show up menu item in linear and add divider between them.
             recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         }
-        DataItemAdapter adapter = new DataItemAdapter(this, dataItems);
         recyclerView.setAdapter(adapter);
     }
 

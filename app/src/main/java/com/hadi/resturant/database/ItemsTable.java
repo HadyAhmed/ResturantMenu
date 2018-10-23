@@ -4,7 +4,9 @@ package com.hadi.resturant.database;
  * Class That Define the structure for the data base table entries and queries.
  */
 public class ItemsTable {
+    // items Table Name
     public static final String TABLE_ITEMS = "items";
+    // items Table Entities
     public static final String COLUMN_ID = "itemId";
     public static final String COLUMN_NAME = "itemName";
     public static final String COLUMN_DESCRIPTION = "description";
@@ -13,6 +15,16 @@ public class ItemsTable {
     public static final String COLUMN_PRICE = "price";
     public static final String COLUMN_IMAGE = "image";
 
+    public static final String[] ALL_COLUMNS = {
+            COLUMN_ID,
+            COLUMN_NAME,
+            COLUMN_DESCRIPTION,
+            COLUMN_CATEGORY,
+            COLUMN_POSITION,
+            COLUMN_PRICE,
+            COLUMN_IMAGE
+    };
+    // SQLite Query to create a new table
     public static final String SQL_CREATE =
             "CREATE TABLE " + TABLE_ITEMS
                     + "("
@@ -24,7 +36,7 @@ public class ItemsTable {
                     + COLUMN_PRICE + " REAL,"
                     + COLUMN_IMAGE + " TEXT"
                     + ");";
-
+    // SQLite Query to drop a table
     public static final String SQL_DELETE =
             "DROP TABLE" + TABLE_ITEMS;
 }
