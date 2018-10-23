@@ -1,7 +1,10 @@
 package com.hadi.resturant.model;
 
+import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.hadi.resturant.database.ItemsTable;
 
 import java.util.UUID;
 
@@ -140,4 +143,16 @@ public class DataItem implements Parcelable {
             return new DataItem[size];
         }
     };
+
+    public ContentValues toValues() {
+        ContentValues values = new ContentValues(7);
+        values.put(ItemsTable.COLUMN_ID, getItemId());
+        values.put(ItemsTable.COLUMN_NAME, getItemName());
+        values.put(ItemsTable.COLUMN_CATEGORY, getCategory());
+        values.put(ItemsTable.COLUMN_DESCRIPTION, getDescription());
+        values.put(ItemsTable.COLUMN_POSITION, getSortPosition());
+        values.put(ItemsTable.COLUMN_IMAGE, getImage());
+        values.put(ItemsTable.COLUMN_PRICE, getPrice());
+        return values;
+    }
 }

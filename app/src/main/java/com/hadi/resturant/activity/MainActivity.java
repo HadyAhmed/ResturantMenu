@@ -4,8 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.database.SQLException;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -23,12 +22,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.hadi.resturant.database.DBHelper;
-import com.hadi.resturant.utils.JSONHelper;
 import com.hadi.resturant.R;
 import com.hadi.resturant.adapter.DataItemAdapter;
+import com.hadi.resturant.database.DataSource;
 import com.hadi.resturant.model.DataItem;
 import com.hadi.resturant.sample.SampleDataProvider;
+import com.hadi.resturant.utils.JSONHelper;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -49,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
     private List<DataItem> dataItems = SampleDataProvider.dataItemList;
     // Reference To Check The Current Permission was granted or not yet
     private boolean accessToExternalStorage;
-    // Reference To Database SQLite
-    SQLiteDatabase database;
+    // Reference To Database SQLite Communication
+    DataSource mDataSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +61,21 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitle(getResources().getString(R.string.app_name));
         toolbar.setSubtitle(R.string.subtitle_menu_item);
 
-        SQLiteOpenHelper dbHelper = new DBHelper(this);
-        database = dbHelper.getWritableDatabase();
+        mDataSource = new DataSource(this);
+        mDataSource.open();
 
+        if (mDataSource.getDatabaseCount() == 0) {
+            for (DataItem items : dataItems) {
+                try {
+                    mDataSource.createItem(items);
+                } catch (SQLException e) {
+                    Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+            Toast.makeText(this, "Items Inserted Into Database", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Database Already Exist", Toast.LENGTH_SHORT).show();
+        }
 
         // Sorting the list item alphabetically
         Collections.sort(dataItems, new Comparator<DataItem>() {
@@ -88,6 +99,19 @@ public class MainActivity extends AppCompatActivity {
         }
         DataItemAdapter adapter = new DataItemAdapter(this, dataItems);
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mDataSource.close(); // Close the database connection if the activity paused.
+        Toast.makeText(this, "Database Connection Was Closed", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mDataSource.open(); // Open the database connection if the activity resumed.
     }
 
     @Override
